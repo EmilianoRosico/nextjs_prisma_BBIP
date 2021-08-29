@@ -1,0 +1,157 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model devicemodels {
+  id            Int     @id @default(autoincrement()) @db.UnsignedInt
+  model         String     @db.VarChar(150)
+  numberOfSlots Int
+  vendor        String     @db.VarChar(150)
+  createdAt     DateTime?  @default(now()) @db.DateTime(0)
+  updatedAt     DateTime?  @default(now()) @db.DateTime(0)
+  deletedAt     DateTime?  @db.DateTime(0)
+  devices       devices[]
+  versions      versions[]
+}
+
+model deviceroles {
+  id        Int     @id @default(autoincrement()) @db.UnsignedInt
+  name      String     @db.VarChar(150)
+  createdAt DateTime?  @default(now()) @db.DateTime(0)
+  updatedAt DateTime?  @default(now()) @db.DateTime(0)
+  deletedAt DateTime?  @db.DateTime(0)
+  devices   devices[]
+  versions  versions[]
+}
+
+model devices {
+  id           Int       @id @default(autoincrement()) @db.UnsignedInt
+  name         String       @db.VarChar(150)
+  status       String       @db.VarChar(150)
+  roleId       Int       @db.UnsignedInt
+  modelsId     Int       @db.UnsignedInt
+  nodesId      Int       @db.UnsignedInt
+  nsoLicense   Int?         @default(0) @db.UnsignedInt
+  ipMgmt       String?      @db.VarChar(150)
+  ipIgp        String?      @db.VarChar(150)
+  room         Int          @db.UnsignedInt
+  row          String?      @db.VarChar(2)
+  rack         Int?         @db.UnsignedInt
+  rackUnit     Int?         @db.UnsignedInt
+  hierarchy    String       @db.VarChar(150)
+  virtual      Int          @default(0)
+  versionId    Int       @db.UnsignedInt
+  createdAt    DateTime?    @default(now()) @db.DateTime(0)
+  updatedAt    DateTime?    @default(now()) @db.DateTime(0)
+  deletedAt    DateTime?    @db.DateTime(0)
+  devicemodels devicemodels @relation(fields: [modelsId], references: [id])
+  nodes        nodes        @relation(fields: [nodesId], references: [id])
+  deviceroles  deviceroles  @relation(fields: [roleId], references: [id])
+  versions     versions     @relation(fields: [versionId], references: [id])
+  ports        ports[]
+  vlans        vlans[]
+
+  @@index([versionId], name: "VersionID_idx")
+  @@index([modelsId], name: "modelsId_idx")
+  @@index([nodesId], name: "nodesId_idx")
+  @@index([roleId], name: "rolesId_idx")
+}
+
+model nodes {
+  id         Int    @id @default(autoincrement()) @db.UnsignedInt
+  Name       String    @db.VarChar(150)
+  cellId     String    @db.VarChar(45)
+  province   String    @db.VarChar(150)
+  country    String    @db.VarChar(150)
+  totalRooms Int?      @default(0)
+  createdAt  DateTime? @default(now()) @db.DateTime(0)
+  updatedAt  DateTime? @default(now()) @db.DateTime(0)
+  deletedAt  DateTime? @db.DateTime(0)
+  devices    devices[]
+}
+
+model ports {
+  id           Int    @id @default(autoincrement()) @db.UnsignedInt
+  deviceId     Int    @db.UnsignedInt
+  slot         Int
+  subSlot      Int
+  port         Int
+  boardModule  String    @db.VarChar(45)
+  license      Int
+  status       String    @db.VarChar(45)
+  project      String    @db.VarChar(150)
+  espejado     String    @db.VarChar(150)
+  clientSide   String    @db.VarChar(150)
+  editedByUser String    @db.VarChar(150)
+  createdAt    DateTime? @db.Date
+  updatedAt    DateTime? @db.Date
+  deletedAt    DateTime? @db.Date
+  devices      devices   @relation(fields: [deviceId], references: [id])
+
+  @@index([deviceId], name: "deviceId_idx")
+}
+
+model users {
+  id        String    @id @db.VarChar(45)
+  firstName String    @db.VarChar(150)
+  lastName  String    @db.VarChar(150)
+  createdAt DateTime? @default(now()) @db.DateTime(0)
+  updatedAt DateTime? @default(now()) @db.DateTime(0)
+  deletedAt DateTime? @db.DateTime(0)
+}
+
+model versions {
+  id           Int       @id @default(autoincrement()) @db.UnsignedInt
+  name         String       @db.VarChar(150)
+  servicePack  String?      @db.VarChar(150)
+  smuPatch     String?      @db.VarChar(150)
+  psrrLink     String?      @db.VarChar(250)
+  forRoleId    Int       @db.UnsignedInt
+  forModelId   Int       @db.UnsignedInt
+  createdAt    DateTime?    @default(now()) @db.DateTime(0)
+  updatedAt    DateTime?    @default(now()) @db.DateTime(0)
+  deletedAt    DateTime?    @db.DateTime(0)
+  devicemodels devicemodels @relation(fields: [forModelId], references: [id])
+  deviceroles  deviceroles  @relation(fields: [forRoleId], references: [id])
+  devices      devices[]
+
+  @@index([forModelId], name: "forModelId_idx")
+  @@index([forRoleId], name: "forRoleId_idx")
+}
+
+model vlans {
+  id           Int    @id @default(autoincrement()) @db.UnsignedInt
+  deviceVlanId Int    @db.UnsignedInt
+  vlan         Int       @db.UnsignedInt
+  name         String?   @db.VarChar(150)
+  editedByUser String    @db.VarChar(150)
+  createdAt    DateTime? @db.Date
+  updatedAt    DateTime? @db.Date
+  deletedAt    DateTime? @db.Date
+  devices      devices   @relation(fields: [deviceVlanId], references: [id])
+
+  @@index([deviceVlanId], name: "devicesId_idx")
+}
+
+model capexs {
+  id                    Int    @id @default(autoincrement()) @db.UnsignedInt
+  solicitante           String?   @db.VarChar(150)
+  areaSolicitante       String?   @db.VarChar(150)
+  requerimiento         String?   @db.VarChar(45)
+  cellId                String?   @db.VarChar(45)
+  tituloProyecto        String?   @db.VarChar(150)
+  redundancia           String?   @db.VarChar(45)
+  capacidadPuerto       String?   @db.VarChar(45)
+  bandwidth             String?   @db.VarChar(45)
+  puertosElectricos     Int       @db.UnsignedInt
+  puertosOpticos        Int       @db.UnsignedInt
+  createdAt             DateTime? @db.Date
+  updatedAt             DateTime? @db.Date
+  deletedAt             DateTime? @db.Date
+  comentarios           String?   @db.VarChar(450)
+}

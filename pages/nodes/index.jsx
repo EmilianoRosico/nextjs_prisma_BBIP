@@ -9,25 +9,25 @@ const columns = [
     width: 100,
     renderCell: function link({ id }) {
       return (
-        <Link href={`/devices/${id}`}>
+        <Link href={`/nodes/${id}`}>
           <a>{id}</a>
         </Link>
       );
     },
   },
   {
-    field: "name",
+    field: "Name",
     headerName: "Acrónimo",
     width: 150,
     editable: true,
   },
   {
-    field: "ipMgmt",
+    field: "cellId",
     headerName: "Ip Mgmt",
     width: 150,
     editable: true,
   },
-  {
+  /*{
     field: "nodes",
     headerName: "Nodo",
     width: 150,
@@ -59,7 +59,7 @@ const columns = [
       result.push(params.value.model);
       return result.join(", ");
     },
-  },
+  },*/
   {
     field: "status",
     headerName: "Estado",
@@ -68,7 +68,7 @@ const columns = [
   },
 ];
 
-const api = "/api/devices/";
+const api = "/api/nodes/";
 
 function index() {
   return (

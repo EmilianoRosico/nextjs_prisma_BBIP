@@ -1,6 +1,4 @@
-import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
+import prisma from 'lib/prisma'
 
 export default async function handle(req, res) {
     if (req.method === 'GET') {
@@ -29,7 +27,7 @@ export default async function handle(req, res) {
             
             )
         res.status('200').json(solicitud)
-    } else if (req.methd === 'POST') {
+    } else if (req.method === 'POST') {
         // Process a POST request
         res.status('200').json({ 'result': 'Ok!' })
     }

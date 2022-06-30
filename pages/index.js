@@ -1,6 +1,6 @@
 import Head from 'next/head'
-import Devices from '../components/Devices'
-import Layout from '../components/Layout'
+import Devices from 'components/Devices'
+import Layout from 'components/Layout'
 
 
 export default function Home() {

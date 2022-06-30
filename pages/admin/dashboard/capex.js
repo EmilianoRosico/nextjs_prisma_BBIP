@@ -1,7 +1,7 @@
 
-import LargeContainer from '../../../components/dashboard/LargeContainer'
-import Navbar from '../../../components/Navbar'
-import Sidebar from '../../../components/Sidebar'
+import LargeContainer from 'components/dashboard/LargeContainer'
+import Navbar from 'components/Navbar'
+import Sidebar from 'components/Sidebar'
 
 function capex() {
     return (

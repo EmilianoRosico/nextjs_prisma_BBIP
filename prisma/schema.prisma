@@ -146,10 +146,12 @@ model capexs {
   cellId                String?   @db.VarChar(45)
   tituloProyecto        String?   @db.VarChar(150)
   redundancia           String?   @db.VarChar(45)
-  capacidadPuerto       String?   @db.VarChar(45)
+  fechaObjetivo         String?   @db.VarChar(45)
   bandwidth             String?   @db.VarChar(45)
   puertosElectricos     Int       @db.UnsignedInt
-  puertosOpticos        Int       @db.UnsignedInt
+  puertosOpticos1gb     Int       @db.UnsignedInt
+  puertosOpticos10gb    Int       @db.UnsignedInt
+  puertosOpticos100gb   Int       @db.UnsignedInt
   createdAt             DateTime? @db.Date
   updatedAt             DateTime? @db.Date
   deletedAt             DateTime? @db.Date

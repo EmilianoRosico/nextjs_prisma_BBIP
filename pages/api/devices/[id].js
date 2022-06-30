@@ -1,7 +1,4 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import {PrismaClient} from '@prisma/client'
-
-const prisma = new PrismaClient()
+import prisma from 'lib/prisma'
 
 export default async function handle(req, res) {
   if (req.method === 'GET') {
@@ -9,6 +6,9 @@ export default async function handle(req, res) {
     const device = await prisma.devices.findUnique({
       where: {
         id: Number(req.query.id)
+      },
+      include: {
+        ports: true,
       }
     })
     if (!device){
@@ -17,7 +17,7 @@ export default async function handle(req, res) {
       res.status('200').json(device)
     }
     
-  } else if (req.methd === 'POST') {
+  } else if (req.method === 'POST') {
     // Process a POST request
     res.status('200').json({'result': 'Ok!'})
   } 
